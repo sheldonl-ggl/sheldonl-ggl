@@ -4,6 +4,7 @@ view: users {
   drill_fields: [id]
 
   dimension: id {
+    label: "User ID"
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
@@ -14,12 +15,21 @@ view: users {
     sql: ${TABLE}.age ;;
   }
 
+  dimension: age_tier {
+    type: tier
+    tiers: [0,20,30,40,50,60,70]
+    style: integer
+    sql: ${age} ;;
+  }
+
   dimension: city {
+    group_label: "User Location"
     type: string
     sql: ${TABLE}.city ;;
   }
 
   dimension: country {
+    group_label: "User Location"
     type: string
     map_layer_name: countries
     sql: ${TABLE}.country ;;
@@ -60,16 +70,26 @@ view: users {
   }
 
   dimension: latitude {
+    hidden: yes
     type: number
     sql: ${TABLE}.latitude ;;
   }
 
   dimension: longitude {
+    hidden: yes
     type: number
     sql: ${TABLE}.longitude ;;
   }
 
+  dimension: location {
+    type: location
+    sql_latitude: ${latitude} ;;
+    sql_longitude: ${longitude} ;;
+  }
+
+
   dimension: state {
+    group_label: "User Location"
     type: string
     sql: ${TABLE}.state ;;
   }
@@ -80,6 +100,7 @@ view: users {
   }
 
   dimension: zip {
+    group_label: "User Location"
     type: zipcode
     sql: ${TABLE}.zip ;;
   }

@@ -17,16 +17,12 @@ view: order_items {
       date,
       week,
       month,
+      month_name,
       quarter,
       year
     ]
     sql: ${TABLE}.created_at ;;
   }
-
-
-
-
-
 
 
   dimension_group: delivered {
@@ -99,6 +95,28 @@ view: order_items {
     # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
+
+
+  ########## All Measures ######################
+  measure: total_sale_price {
+    type: sum
+    sql: ${sale_price} ;;
+    value_format_name: usd_0
+    drill_fields: [order_id, user_id, created_date, total_sale_price]
+  }
+
+  measure: average_sale_price {
+    type: average
+    sql: ${sale_price} ;;
+    value_format_name: usd_0
+  }
+
+  measure: total_products_order { # This is a special derived column
+    description: "I am dividing my products counts by order counts"
+    type:  number
+    sql: 1.0*${products.count}/nullif(${count},0) ;;
+  }
+
 
   measure: count {
     type: count
